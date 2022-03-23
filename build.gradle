@@ -1,0 +1,40 @@
+plugins {
+	id 'org.springframework.boot' version '2.6.4'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+	id 'application'
+	id "org.flywaydb.flyway" version "8.2.0"
+}
+
+group = 'com.charusmita'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+repositories {
+	mavenCentral()
+}
+sourceSets.main.java.srcDirs = ['src/main/java']
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.flywaydb:flyway-core'
+	implementation "org.springframework.boot:spring-boot-starter-validation"
+	runtimeOnly 'mysql:mysql-connector-java'
+	implementation "org.apache.logging.log4j:log4j-api:2.6.1"
+	implementation "org.apache.logging.log4j:log4j-core:2.6.1"
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+/*flyway {
+	driver = 'com.mysql.jdbc.Driver'
+	url = 'jdbc:mysql://127.0.0.1:3306/test_items?useMysqlMetadata=true'
+	user = 'root'
+	password = 'root'
+	schemas = ['test_items']
+	locations= 'src/main/resources/db/migration'
+}*/
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+mainClassName = 'com.charusmita.slsmettle.SlsMettleApplication'
