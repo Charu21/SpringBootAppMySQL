@@ -7,7 +7,8 @@ It communicates with the MySQL database using Spring Data JPA and Flyway for sch
 creations and migration.
 
 The REST webservice manages items in the below format. (Create, Read, Update, Delete)
-{
+
+```json{
   "id": "26937741-15a2-435b-82b0-39cd0539ed5e",  :uuid
   "name": "Item Name",                           :string (0-20)
   "description": "Item description",             :string (0-200)
@@ -17,8 +18,9 @@ The REST webservice manages items in the below format. (Create, Read, Update, De
   "updated_at": "2022-03-10T14:46:55.372283Z",   :timestamp (iso8601)
   "deleted_at": null                             :timestamp (iso8601)
 }
+```
 
-**ENHANCEMENTS: **
+**ENHANCEMENTS:**
 1) It also contains a request filter that logs the IP address of each incoming request.
 2) It has a basic search endpoint that returns a list of matching items.
 3) It broadcasts messages when items are modified to a RabbitMQ topic.

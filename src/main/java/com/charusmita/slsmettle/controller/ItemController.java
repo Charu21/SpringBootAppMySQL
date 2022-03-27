@@ -7,7 +7,9 @@ import com.charusmita.slsmettle.response.ItemResponse;
 import com.charusmita.slsmettle.service.ItemService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +26,15 @@ public class ItemController {
 
     @Autowired
     private ItemService itemService;
+
+    @Autowired
+    private AmqpTemplate amqpTemplate;
+
+    @Value("${rabbitmq.exchange}")
+    String exchangeName;
+
+    @Value("${rabbitmq.routingkey}")
+    String routingKey;
 
     @GetMapping("/items")
     public List<Item> getAllItems() {
@@ -69,6 +80,8 @@ public class ItemController {
     @PutMapping(value = "/item/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ItemResponse updateItem(@RequestBody @Valid ItemRequest itemRequest, @PathVariable UUID id) {
         logger.info("Update item called");
-        return ItemResponse.builder().item(this.itemService.replaceItem(itemRequest, id)).build();
+        Item itemUpdated = this.itemService.replaceItem(itemRequest, id);
+        amqpTemplate.convertAndSend(exchangeName, routingKey, "Item updated = "+itemUpdated.toString());
+        return ItemResponse.builder().item(itemUpdated).build();
     }
 }
