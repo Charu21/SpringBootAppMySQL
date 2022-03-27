@@ -13,6 +13,11 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+/**
+ * Item Service to process Create, Read, Update and Delete of Hockey Items.
+ *
+ * @author charusmita shah
+ */
 @Service
 public record ItemService(
         ItemRepository itemRepository
@@ -20,6 +25,12 @@ public record ItemService(
 
     private static final Logger logger = LoggerFactory.getLogger(ItemService.class);
 
+    /**
+     * Add a new item to the items table.
+     *
+     * @param item is the new item to be added.
+     * @return the item added.
+     */
     public Item addItem(Item item) {
         try {
             final Item savedItem = this.itemRepository.save(item);
@@ -32,6 +43,12 @@ public record ItemService(
         }
     }
 
+    /**
+     * Get the item details for ids provided in ids.
+     *
+     * @param ids the list of ids for which information needs to be fetched.
+     * @return the list of items corresponding to the list of ids.
+     */
     public List<Item> getItemsByIds(List<UUID> ids) {
         List<Item> items = ids.stream().map(item -> this.itemRepository.findById(item).orElse(null)).collect(Collectors.toList());
         if (items.isEmpty())
@@ -41,6 +58,12 @@ public record ItemService(
         return items;
     }
 
+    /**
+     * Get a single item by id.
+     *
+     * @param id the id for the item which needs to be fetched.
+     * @return the Item with the specific id.
+     */
     public Item getItem(UUID id) {
         final Optional<Item> byId = this.itemRepository.findById(id);
         final Item[] ans = new Item[1];
@@ -55,6 +78,11 @@ public record ItemService(
         return ans[0];
     }
 
+    /**
+     * Get all items currently in database. Made for small amount of data only.
+     *
+     * @return all the items currently in the items table.
+     */
     public List<Item> getAllItems() {
         List<Item> items = itemRepository.findAll();
         if (items.isEmpty()) {
@@ -65,6 +93,11 @@ public record ItemService(
         return items;
     }
 
+    /**
+     * Delete an item by specific id.
+     *
+     * @param id deletes the item specified by id.
+     */
     public void deleteItem(UUID id) {
         try {
             if (this.itemRepository.findById(id).isPresent())
@@ -76,6 +109,13 @@ public record ItemService(
         }
     }
 
+    /**
+     * Used to replace an existing item or if it doesnt exist, is created.
+     *
+     * @param newItem the modified item details.
+     * @param id      the id of the item to be modified.
+     * @return the modified item.
+     */
     public Item replaceItem(ItemRequest newItem, UUID id) {
         return this.itemRepository.findById(id)
                 .map(item -> {
@@ -114,6 +154,12 @@ public record ItemService(
                 );
     }
 
+    /**
+     * Check if the specified item exists or not in the items table.
+     *
+     * @param id the id of the item to be checked.
+     * @return boolean true if the item exists or false if it does not.
+     */
     public boolean itemExists(UUID id) {
         return this.itemRepository.existsById(id);
     }
