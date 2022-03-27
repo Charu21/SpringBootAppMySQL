@@ -1,15 +1,15 @@
 package com.charusmita.slsmettle;
 
-import com.charusmita.slsmettle.controller.ItemController;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication
+@EnableJpaAuditing
 public class SlsMettleApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(SlsMettleApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(SlsMettleApplication.class, args);
+    }
 
 }

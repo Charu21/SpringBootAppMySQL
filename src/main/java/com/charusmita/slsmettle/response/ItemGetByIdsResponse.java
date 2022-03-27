@@ -1,17 +1,15 @@
 package com.charusmita.slsmettle.response;
 
 import com.charusmita.slsmettle.model.Item;
+import lombok.AllArgsConstructor;
+import lombok.Value;
 
 import java.util.List;
 
+
+@Value
+@AllArgsConstructor
 public class ItemGetByIdsResponse {
-    private final List<Item> items;
+    List<Item> items;
 
-    public ItemGetByIdsResponse(List<Item> items) {
-        this.items = items;
-    }
-
-    public List<Item> getItems() {
-        return items;
-    }
 }
