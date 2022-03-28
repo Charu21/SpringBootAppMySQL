@@ -8,6 +8,8 @@ import com.sipios.springsearch.anotation.SearchSpec;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -83,16 +85,16 @@ public class ItemService {
     }
 
     /**
-     * Get all items currently in database. Made for small amount of data only.
+     * Get all items currently in database. Made with Paging.
      *
      * @return all the items currently in the items table.
      */
-    public List<Item> getAllItems() {
-        List<Item> items = itemRepository.findAll();
+    public Page<Item> getAllItems(Pageable pageable) {
+        Page<Item> items = itemRepository.findAll(pageable);
         if (items.isEmpty()) {
             logger.info("No items found!");
         } else {
-            logger.info(items.size() + " Items found!");
+            logger.info(pageable.getPageSize() + " Items found!");
         }
         return items;
     }

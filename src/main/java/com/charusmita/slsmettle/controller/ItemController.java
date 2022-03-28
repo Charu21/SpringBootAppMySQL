@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -40,9 +42,13 @@ public class ItemController {
     String routingKey;
 
     @GetMapping("/items")
-    public List<Item> getAllItems() {
+    public ResponseEntity<Page<Item>> getAllItems(
+            @RequestParam(value = "page", defaultValue = "0", required = false) int page,
+            @RequestParam(value = "count", defaultValue = "10", required = false) int size
+            ) {
         logger.info("Get all items endpoint called");
-        return this.itemService.getAllItems();
+        Page<Item> itemPage = this.itemService.getAllItems(PageRequest.of(page, size));
+        return new ResponseEntity<>(itemPage, HttpStatus.OK);
     }
 
     @GetMapping("/items/{id}")
