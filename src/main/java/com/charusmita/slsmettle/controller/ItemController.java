@@ -5,13 +5,16 @@ import com.charusmita.slsmettle.request.ItemRequest;
 import com.charusmita.slsmettle.response.ItemGetByIdsResponse;
 import com.charusmita.slsmettle.response.ItemResponse;
 import com.charusmita.slsmettle.service.ItemService;
+import com.sipios.springsearch.anotation.SearchSpec;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -81,7 +84,12 @@ public class ItemController {
     public ItemResponse updateItem(@RequestBody @Valid ItemRequest itemRequest, @PathVariable UUID id) {
         logger.info("Update item called");
         Item itemUpdated = this.itemService.replaceItem(itemRequest, id);
-        amqpTemplate.convertAndSend(exchangeName, routingKey, "Item updated = "+itemUpdated.toString());
+        amqpTemplate.convertAndSend(exchangeName, routingKey, "Item updated = " + itemUpdated.toString());
         return ItemResponse.builder().item(itemUpdated).build();
+    }
+
+    @GetMapping(value = "/items/filter")
+    public ResponseEntity<List<Item>> searchForItems(@SearchSpec Specification<Item> specifications) {
+        return new ResponseEntity<>(this.itemService.searchByItem(specifications), HttpStatus.OK);
     }
 }

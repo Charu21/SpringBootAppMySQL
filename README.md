@@ -23,6 +23,11 @@ The REST webservice manages items in the below format. (Create, Read, Update, De
 **ENHANCEMENTS:**
 1) It also contains a request filter that logs the IP address of each incoming request.
 2) It has a basic search endpoint that returns a list of matching items.
+        To use search we need to provide request as `v1/api/items/filter?search=(name:'Hockey Pads')`
+        or `http://localhost:8080/v1/api/items/filter?search=(name:'Hockey Pads') AND cost>40.0` 
+        For more info visit [sipios search](https://github.com/sipios/spring-search) to be replaced 
+        by ElasticSearch in future!
+       
 3) It broadcasts messages when items are modified to a RabbitMQ topic.
 RabbitMQ 3.9.4 is used running it locally. To see the messages go to http://localhost:15672/
 

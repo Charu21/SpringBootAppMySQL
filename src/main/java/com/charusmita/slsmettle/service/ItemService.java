@@ -4,8 +4,11 @@ import com.charusmita.slsmettle.exception.ItemNotFoundException;
 import com.charusmita.slsmettle.model.Item;
 import com.charusmita.slsmettle.repository.ItemRepository;
 import com.charusmita.slsmettle.request.ItemRequest;
+import com.sipios.springsearch.anotation.SearchSpec;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,11 +22,12 @@ import java.util.stream.Collectors;
  * @author charusmita shah
  */
 @Service
-public record ItemService(
-        ItemRepository itemRepository
-) {
+public class ItemService {
 
     private static final Logger logger = LoggerFactory.getLogger(ItemService.class);
+
+    @Autowired
+    private ItemRepository itemRepository;
 
     /**
      * Add a new item to the items table.
@@ -162,5 +166,16 @@ public record ItemService(
      */
     public boolean itemExists(UUID id) {
         return this.itemRepository.existsById(id);
+    }
+
+    /**
+     * Search for items by Specification
+     *
+     * @param specifications
+     * @return a list of items matching above specifications
+     */
+    public List<Item> searchByItem(@SearchSpec Specification<Item> specifications) {
+        final List<Item> all = this.itemRepository.findAll(Specification.where(specifications));
+        return all;
     }
 }
