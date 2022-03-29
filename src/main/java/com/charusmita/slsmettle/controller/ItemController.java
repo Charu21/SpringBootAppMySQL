@@ -64,9 +64,9 @@ public class ItemController {
     }
 
     @DeleteMapping("/items/{id}")
-    public void deleteItem(@PathVariable UUID id) {
+    public UUID deleteItem(@PathVariable UUID id) {
         logger.info("Deleting item with item id=" + id);
-        this.itemService.deleteItem(id);
+        return this.itemService.deleteItem(id);
     }
 
     @PostMapping(value = "/item", consumes = MediaType.APPLICATION_JSON_VALUE)

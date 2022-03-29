@@ -41,6 +41,7 @@ public class Item implements Serializable {
     String description;
 
     @Enumerated(EnumType.STRING)
+    @NotNull
     Type type;
 
     @Column(name = "cost")

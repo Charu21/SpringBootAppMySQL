@@ -104,15 +104,15 @@ public class ItemService {
      *
      * @param id deletes the item specified by id.
      */
-    public void deleteItem(UUID id) {
+    public UUID deleteItem(UUID id) {
         try {
-            if (this.itemRepository.findById(id).isPresent())
                 this.itemRepository.deleteById(id);
-            logger.info("Deleted item success!");
+                logger.info("Deleted item success!");
         } catch (Exception e) {
             logger.info("Deleting item exception");
             throw new ItemNotFoundException(id);
         }
+        return id;
     }
 
     /**
@@ -142,22 +142,9 @@ public class ItemService {
                     logger.info("Updating item success!");
                     return this.itemRepository.save(item);
                 })
-                .orElseGet(() -> {
-                            logger.info("Item does not exist, creating new item");
-                            Item item = this.itemRepository.save(Item.builder()
-                                    .id(id)
-                                    .name(newItem.getName())
-                                    .cost(newItem.getCost())
-                                    .description(newItem.getDescription())
-                                    .type(newItem.getType())
-                                    .createdAt(newItem.getCreatedAt())
-                                    .updatedAt(newItem.getUpdatedAt())
-                                    .deletedAt(newItem.getDeletedAt())
-                                    .build());
-                            logger.info("Creating new item success!");
-                            return item;
-                        }
-                );
+                .orElseThrow(() -> {
+                    throw new ItemNotFoundException(id);
+                });
     }
 
     /**
@@ -177,7 +164,6 @@ public class ItemService {
      * @return a list of items matching above specifications
      */
     public List<Item> searchByItem(@SearchSpec Specification<Item> specifications) {
-        final List<Item> all = this.itemRepository.findAll(Specification.where(specifications));
-        return all;
+        return this.itemRepository.findAll(Specification.where(specifications));
     }
 }
