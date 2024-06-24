@@ -1,6 +1,6 @@
  **DESCRIPTION**
  
-This is a Spring Boot application that hosts a REST web service for managing hockey 
+This is a Spring Boot Microservice that hosts a REST web service for managing hockey 
 items and persists that data in a MySQL 8.0 database.
 It is built with Gradle, uses Java 14, uses Log4J2 for logging instead of SLF4J.
 It communicates with the MySQL database using Spring Data JPA and Flyway for schema 
